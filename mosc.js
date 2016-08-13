@@ -2,7 +2,14 @@ var MoscBase = function (evaluation_context_dictionary)
 {
 	this.eval_ctx_dict = evaluation_context_dictionary;
 	this.baseObject    = {};
-	this.noMoreChain   = false;
+	this.noMoreBuild   = false;
+
+	function emptyCheck(value, message)
+	{
+		if(typeof value == 'undefined' || !value){
+			throw new Error(message)
+		}
+	}
 
 	this.parse_properties = function (key, properties, eval_dict)
 	{
@@ -21,6 +28,10 @@ var MoscBase = function (evaluation_context_dictionary)
 		{
 			properties[i]     = properties[i].trim();
 		    property_parts    = properties[i].split(':');
+
+		    emptyCheck(property_parts[0], 'Invalid key:value pair passed');
+		    emptyCheck(property_parts[1], 'Invalid key:value pair passed');
+
 		    property_parts[0] = property_parts[0].trim();
 		    var pvalue        = property_parts[1].trim();
 		    if(pvalue.indexOf('*') < 0){
@@ -28,34 +39,36 @@ var MoscBase = function (evaluation_context_dictionary)
 		    }
 		    else
 		    {
-		    	propertyBase[key][property_parts[0]] = eval(get_eval_string(pvalue));
+		    	try
+		    	{
+		    		propertyBase[key][property_parts[0]] = eval(get_eval_string(pvalue));
+		    	}
+		    	catch(e)
+		    	{
+		    		throw new Error('Context not found in eval_dict');
+		    	}
+
 		    }
 			 
 		} 
 		return propertyBase[key];
 	}
 
-	this.chain = function (property_key, properties) 
+	this.build = function (property_key, properties) 
 	{
+		emptyCheck(property_key, 'No prop key passed');
+		emptyCheck(properties, 'No object properties passed');
 		this.baseObject[property_key] = this.parse_properties(property_key, properties, this.eval_ctx_dict);
-		return this.noMoreChain ? this.baseObject : this;
+		return this.noMoreBuild ? this.baseObject : this;
 	}
 
 	this.end = function () 
 	{
-		this.noMoreChain = true;
+		this.noMoreBuild = true;
 		return this.baseObject;
 	}
 
 }
 module.exports = MoscBase;
 
-/*var Sequelize = {string:'SEQUELIZE_STRING',integer:'SEQUELIZE_INTEGER'};
-var eval_dict = {'SEQ':Sequelize}
-var mocbasetest = new MoscBase(eval_dict);
-mocbasetest.chain('id','type:*SEQ*.string, primarykey:true, unique:true')
-		   .chain('id', 'autoIncrement:940')
-		   .chain('firstName','type:*SEQ*.string, primarykey:true, unique:true')
-		   .chain('mobileNumber','type:*SEQ*.integer,unique:true')
-		   .end();*/
 
