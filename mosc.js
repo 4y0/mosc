@@ -48,14 +48,14 @@ var MoscBase = function (evaluation_context_dictionary)
 	}
 
 }
+module.exports = MoscBase;
 
-
-var Sequelize = {string:'SEQUELIZE_STRING',integer:'SEQUELIZE_INTEGER'};
+/*var Sequelize = {string:'SEQUELIZE_STRING',integer:'SEQUELIZE_INTEGER'};
 var eval_dict = {'SEQ':Sequelize}
 var mocbasetest = new MoscBase(eval_dict);
 mocbasetest.chain('id','type:*SEQ*.string, primarykey:true, unique:true')
 		   .chain('id', 'autoIncrement:940')
 		   .chain('firstName','type:*SEQ*.string, primarykey:true, unique:true')
 		   .chain('mobileNumber','type:*SEQ*.integer,unique:true')
-		   .end();
+		   .end();*/
 
