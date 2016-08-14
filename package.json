@@ -1,7 +1,7 @@
 {
   "name": "mosc",
   "version": "1.0.0",
-  "description": "",
+  "description": "A simple inline javascript object model builder",
   "main": "mosc.js",
   "scripts": {
     "test": "mocha --reporter spec"
@@ -10,8 +10,8 @@
     "type": "git",
     "url": "git+https://github.com/4y0/mosc.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["object builder", "ORMS", "javascript", "nodejs"],
+  "author": "4y0",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/4y0/mosc/issues"
