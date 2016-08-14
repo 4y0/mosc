@@ -4,13 +4,19 @@
   "description": "A simple inline javascript object model builder",
   "main": "mosc.js",
   "scripts": {
-    "test": "mocha --reporter spec"
+    "test": "mocha --reporter spec",
+    "cover": "node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha -- -R spec test/*"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/4y0/mosc.git"
   },
-  "keywords": ["object builder", "ORMS", "javascript", "nodejs"],
+  "keywords": [
+    "object builder",
+    "ORMS",
+    "javascript",
+    "nodejs"
+  ],
   "author": "4y0",
   "license": "ISC",
   "bugs": {
@@ -19,6 +25,8 @@
   "homepage": "https://github.com/4y0/mosc#readme",
   "devDependencies": {
     "chai": "3.5.0",
+    "coveralls": "2.11.12",
+    "istanbul": "0.4.4",
     "mocha": "3.0.2"
   }
 }
