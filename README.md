@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/4y0/mosc.svg?branch=master)](https://travis-ci.org/4y0/mosc)
+[![Coverage Status](https://coveralls.io/repos/github/4y0/mosc/badge.svg?branch=master)](https://coveralls.io/github/4y0/mosc?branch=master)
 # Mosc.js (A simple inline object model builder)
 
 
