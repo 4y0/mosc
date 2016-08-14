@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/4y0/mosc.svg?branch=master)](https://travis-ci.org/4y0/mosc)
 # Mosc.js (A simple inline object model builder)
 
 
