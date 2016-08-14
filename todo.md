@@ -1,16 +1,3 @@
 * Find a way to achieve this using mosc.js
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-
-var blogSchema = new Schema({
-  title:  String,
-  author: String,
-  body:   String,
-  comments: [{ body: String, date: Date }],
-  date: { type: Date, default: Date.now },
-  hidden: Boolean,
-  meta: {
-    votes: Number,
-    favs:  Number
-  }
-});
+Add support for arrays:
+comments: [{ body: String, date: Date }],

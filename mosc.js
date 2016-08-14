@@ -11,7 +11,7 @@ var MoscBase = function (evaluation_context_dictionary)
 		}
 	}
 
-	this.parse_properties = function (key, properties, eval_dict)
+	this.parse_properties = function (key, properties, baseObject, eval_dict)
 	{
 		function get_eval_string(path) {
 			var eval_prop = path.match(/\*([a-zA-Z_0-9]+)\*/)[1];
@@ -19,7 +19,13 @@ var MoscBase = function (evaluation_context_dictionary)
 		}
 
 		var propertyBase      = {}; 
-		propertyBase[key]     = !this.baseObject[key] ? {} : this.baseObject[key];
+		if(properties){ 
+		   baseObject[key] = baseObject[key] || {}; 
+		   propertyBase         = baseObject[key];
+	    }else{
+	    	propertyBase = baseObject;
+	    	properties = key;
+	    }
 		properties            = properties.split(',');
 		var properties_length = properties.length;
 		var property_parts    = null;
@@ -35,13 +41,13 @@ var MoscBase = function (evaluation_context_dictionary)
 		    property_parts[0] = property_parts[0].trim();
 		    var pvalue        = property_parts[1].trim();
 		    if(pvalue.indexOf('*') < 0){
-		    	propertyBase[key][property_parts[0]] = pvalue;
+		    	propertyBase[property_parts[0]] = pvalue;
 		    }
 		    else
 		    {
 		    	try
 		    	{
-		    		propertyBase[key][property_parts[0]] = eval(get_eval_string(pvalue));
+		    		propertyBase[property_parts[0]] = eval(get_eval_string(pvalue));
 		    	}
 		    	catch(e)
 		    	{
@@ -49,26 +55,60 @@ var MoscBase = function (evaluation_context_dictionary)
 		    	}
 
 		    }
-			 
+			  
 		} 
-		return propertyBase[key];
+		return baseObject;
 	}
 
 	this.build = function (property_key, properties) 
 	{
-		emptyCheck(property_key, 'No prop key passed');
-		emptyCheck(properties, 'No object properties passed');
-		this.baseObject[property_key] = this.parse_properties(property_key, properties, this.eval_ctx_dict);
+
+		emptyCheck(property_key, 'No prop key passed'); 
+		properties = properties || null;
+		this.parse_properties(property_key, properties, this.baseObject, this.eval_ctx_dict);
+		return this.noMoreBuild ? this.baseObject : this;
+	}
+
+	this.buildIn = function(depth_path, properties)
+	{
+		emptyCheck(depth_path, 'No object path passed'); 
+		var paths     = depth_path.split('.');
+		var buildBase = this.baseObject;
+
+		for( x = 0; x < paths.length; x++) 
+		{
+			if(buildBase[paths[x]])
+			{
+
+				//Only build when path is an object. x:'string' should fail
+				if( typeof buildBase[paths[x]] == 'object' )
+				{
+					buildBase = buildBase[paths[x]];
+				}
+				else
+				{
+					throw new Error('Path not an object');
+				}
+					
+			}
+			else
+			{
+				buildBase = buildBase[paths[x]] = {};
+			}
+		} 
+		//If properties are passed, populate new object.
+		if (properties)
+		{
+			this.parse_properties(properties, null, buildBase, this.eval_ctx_dict);
+		}
 		return this.noMoreBuild ? this.baseObject : this;
 	}
 
 	this.end = function () 
 	{
-		this.noMoreBuild = true;
+		this.noMoreBuild = true; console.log(this.baseObject);
 		return this.baseObject;
 	}
 
 }
-module.exports = MoscBase;
-
-
+module.exports = MoscBase; 
