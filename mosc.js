@@ -106,7 +106,7 @@ var MoscBase = function (evaluation_context_dictionary)
 
 	this.end = function () 
 	{
-		this.noMoreBuild = true; console.log(this.baseObject);
+		this.noMoreBuild = true;
 		return this.baseObject;
 	}
 
