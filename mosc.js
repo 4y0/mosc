@@ -47,7 +47,13 @@ var MoscBase = function (evaluation_context_dictionary)
 		    {
 		    	try
 		    	{
-		    		propertyBase[property_parts[0]] = eval(get_eval_string(pvalue));
+				// arbitary code execution mitigation
+				let blacklist = ['&', ';', '|', '-', '$', '`', '||'];
+				if (blacklist.some(v => get_eval_string(pvalue).includes(v))) {
+					break;
+				} else {
+		    			propertyBase[property_parts[0]] = eval(get_eval_string(pvalue));
+				}
 		    	}
 		    	catch(e)
 		    	{
