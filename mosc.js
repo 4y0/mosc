@@ -49,8 +49,14 @@ var MoscBase = function (evaluation_context_dictionary)
 		    	{
 				// arbitary code execution mitigation
 				let blacklist = ['&', ';', '|', '-', '$', '`', '||'];
-				if (blacklist.some(v => get_eval_string(pvalue).includes(v))) {
-					break;
+				let escapedString = get_eval_string(pvalue);
+				if (blacklist.some(v => escapedString.includes(v))) {
+					for(var i=0; i<escapedString.length; i++){
+						if(blacklist.includes(escapedString[i])){
+							escapedString = escapedString.replace(escapedString[i], "");
+						}
+					}
+					propertyBase[property_parts[0]] = eval(escapedString);
 				} else {
 		    			propertyBase[property_parts[0]] = eval(get_eval_string(pvalue));
 				}
